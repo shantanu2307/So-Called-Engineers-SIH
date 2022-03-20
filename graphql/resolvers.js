@@ -20,7 +20,6 @@ const resolvers = {
   },
   Mutation: {
     createProduct: async (_, data) => {
-      console.log(data);
       const product = await prisma.product.create({
         data: data
       });
