@@ -51,7 +51,6 @@ const resolvers = {
     schemes: async (_, obj) => {
       const schemes = await prisma.scheme.findMany({});
       return schemes;
-
     }
   },
   Mutation: {
@@ -66,6 +65,21 @@ const resolvers = {
         data: data
       });
       return scheme;
+    },
+    updateUser: async (_, data) => {
+      const { aadharNumber, scheme } = data;
+      const user = await prisma.user.findUnique({
+        where: {
+          aadharNumber: aadharNumber
+        }
+      });
+      await prisma.userSchema.create({
+        data: {
+          userId: user.id,
+          schemeId: scheme
+        }
+      })
+      return user;
     }
   }
 };
