@@ -18,7 +18,9 @@
     "fastify-plugin": "^3.0.1",
     "http-errors": "^2.0.0",
     "mercurius": "^9.3.5",
-    "redis": "^4.0.4"
+    "node-localstorage": "^2.2.1",
+    "redis": "^4.0.4",
+    "twilio": "^3.76.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

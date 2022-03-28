@@ -1,53 +1,60 @@
 import pkg from '@prisma/client';
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
+import LocalStorage from 'node-localstorage'
+
+const localStorage = new LocalStorage.LocalStorage('./scratch');
+
+//dotenv
+import dotenv from 'dotenv';
+dotenv.config();
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+import Client from 'twilio';
+const client = new Client(accountSid, authToken);
+
 
 const resolvers = {
   Query: {
-    products: async (_, obj) => {
-      const products = await prisma.product.findMany({});
-      return products;
-    },
-    product: async (_, obj) => {
-      const { id } = obj;
-      const product = await prisma.product.findUnique({
+    user: async (_, obj) => {
+      const { aadharNumber } = obj;
+      const user = await prisma.user.findUnique({
         where: {
-          id: Number(id)
+          aadharNumber: aadharNumber
         }
       });
-      return product;
+      localStorage.setItem('phoneNumber', user.phoneNumber);
+      return user;
+    },
+    sms: async (_, obj) => {
+      const phoneNumber = localStorage.getItem("phoneNumber");
+      // We will store OTP in local storage
+      const otp = Math.floor(Math.random() * 9000) + 1000;
+      await client.messages
+        .create({
+          body: 'Your OTP is ' + otp, from: '+15419200427', to: '+919599739926'
+        })
+        .then(message => console.log(message.sid));
+      console.log(otp);
+      localStorage.setItem('otp', otp);
+      return "OTP IS SENT!";
+    },
+    otpverify: async (_, obj) => {
+      const { otp } = obj;
+      const OTP = localStorage.getItem('otp');
+      if (Number(otp) == Number(OTP)) {
+        return true;
+      }
+      return false;
     }
   },
   Mutation: {
-    createProduct: async (_, data) => {
-      const product = await prisma.product.create({
+    createUser: async (_, data) => {
+      const user = await prisma.user.create({
         data: data
       });
-      return product;
-    },
-    updateProduct: async (_, data) => {
-      const { id } = data;
-      const product = await prisma.product.update({
-        where: {
-          id: Number(id)
-        },
-        data: {
-          name: data.name,
-          price: data.price,
-          categoryId: data.categoryId
-        },
-        include: { category: true }
-      });
-      return product;
-    },
-    deleteProduct: async (_, data) => {
-      const { id } = data;
-      const deletedProduct = await prisma.product.delete({
-        where: {
-          id: Number(id)
-        }
-      });
-      return deletedProduct;
+      return user;
     }
   }
 };

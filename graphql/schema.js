@@ -1,29 +1,37 @@
 const schema = `
 
 type Query {
-  product(id: Int!): Product
-  products: [Product]
+  user(aadharNumber: String!): User
+  sms: String
+  otpverify(otp:Int!): Boolean
 }
 
 type Mutation{
-  createProduct(name: String!, price: Int!, categoryId: Int!): Product
-  updateProduct(id: Int!, name: String, price: Int, categoryId: Int): Product
-  deleteProduct(id: Int!): Product
+  createUser(name: String!, fatherName: String, address:String!, aadharNumber:String!,pincode: Int!, phoneNumber:String!, gender:String!,dateOfBirth: String!): User
+  createScheme(name :String!):Scheme
 }
 
-type Category {
-  id: Int!
-  name: String!
-  products: [Product]
+
+type Scheme{
+  id:Int!
+  name:String!
 }
 
-type Product{
+type User{
   id: Int!
   name: String!
-  price: Int!
-  categoryId: Int!
+  fatherName: String
+  address: String!
+  aadharNumber: String!
+  pincode: Int!
+  phoneNumber: String!
+  gender: String!
+  dateOfBirth:String!
 }
 
 `
+
+
+
 
 export default schema;
