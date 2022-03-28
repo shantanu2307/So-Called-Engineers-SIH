@@ -5,8 +5,6 @@ const app = fastify({ logger: true });
 import schema from './graphql/schema';
 import resolvers from './graphql/resolvers';
 
-
-
 app.register(mercurius, {
   schema,
   resolvers,

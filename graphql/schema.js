@@ -4,6 +4,7 @@ type Query {
   user(aadharNumber: String!): User
   sms: String
   otpverify(otp:Int!): Boolean
+  schemes: [Scheme]
 }
 
 type Mutation{

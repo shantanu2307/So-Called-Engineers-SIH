@@ -47,6 +47,11 @@ const resolvers = {
         return true;
       }
       return false;
+    },
+    schemes: async (_, obj) => {
+      const schemes = await prisma.scheme.findMany({});
+      return schemes;
+
     }
   },
   Mutation: {
@@ -55,6 +60,12 @@ const resolvers = {
         data: data
       });
       return user;
+    },
+    createScheme: async (_, data) => {
+      const scheme = await prisma.scheme.create({
+        data: data
+      });
+      return scheme;
     }
   }
 };
