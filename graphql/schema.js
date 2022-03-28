@@ -1,5 +1,16 @@
 const schema = `
 
+type Scheme{
+  id:Int!
+  name:String!
+}
+
+input SchemeInput{
+  id:Int!
+  name:String!
+}
+
+
 type Query {
   user(aadharNumber: String!): User
   sms: String
@@ -10,13 +21,10 @@ type Query {
 type Mutation{
   createUser(name: String!, fatherName: String, address:String!, aadharNumber:String!,pincode: Int!, phoneNumber:String!, gender:String!,dateOfBirth: String!): User
   createScheme(name :String!):Scheme
+  updateUser(aadharNumber: String!, scheme:[SchemeInput!]):User
 }
 
 
-type Scheme{
-  id:Int!
-  name:String!
-}
 
 type User{
   id: Int!
