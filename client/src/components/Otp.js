@@ -12,7 +12,7 @@ const Otp = () => {
     const verifyOtp = async () => {
         console.log('Verify OTP');
         console.log(otp);
-        navigate('/');
+        navigate('/scheme');
     }
   return (
     <div>
